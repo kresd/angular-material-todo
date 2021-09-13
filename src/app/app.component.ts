@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { Store } from '@ngrx/store';
+import { select, Store } from '@ngrx/store';
 import { Observable } from 'rxjs';
 
 import { State } from './state/state.interface';
@@ -22,10 +22,10 @@ export class AppComponent implements OnInit {
 
   constructor(private store: Store<State>) { }
   
-  initialize() {
+  ngOnInit() {
     generateToDos().forEach(todo => this.store.dispatch(new AddToDo(todo)));
-    this.completeToDos = this.store.pipe(completeToDos);
-    this.incompleteToDos = this.store.pipe(incompleteToDos);
+    this.completeToDos = this.store.pipe(select(completeToDos));
+    this.incompleteToDos = this.store.pipe(select(incompleteToDos));
   }
 
   addToDo() {
@@ -36,7 +36,8 @@ export class AppComponent implements OnInit {
     }));
   }
 
-  onAddToDoChange() {
+  onAddToDoChange(todo: Partial<ToDo>) {
+    this._toDo = todo;
   }
 
   onCompleteToDo(toDo: ToDo) {
