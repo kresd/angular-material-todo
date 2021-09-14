@@ -10,18 +10,19 @@ import { generateToDos, ToDo } from './state/todo/todo.model';
 @Component({
   selector: 'my-app',
   templateUrl: './app.component.html',
-  styleUrls: [ './app.component.scss' ]
+  styleUrls: ['./app.component.scss']
 })
 export class AppComponent implements OnInit {
+  title = "Todo";
 
-  completeToDos: Observable<Array<ToDo>>;
+  completeToDos?: Observable<Array<ToDo>>;
 
-  incompleteToDos: Observable<Array<ToDo>>;
+  incompleteToDos?: Observable<Array<ToDo>>;
 
-  private _toDo: Partial<ToDo>;
+  private _toDo!: Partial<ToDo>;
 
   constructor(private store: Store<State>) { }
-  
+
   ngOnInit() {
     generateToDos().forEach(todo => this.store.dispatch(new AddToDo(todo)));
     this.completeToDos = this.store.pipe(select(completeToDos));

@@ -1,6 +1,6 @@
 export interface ToDo {
   id: number;
-  task: string;
+  task?: string;
   complete: boolean;
 }
 

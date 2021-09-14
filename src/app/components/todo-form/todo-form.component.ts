@@ -14,7 +14,7 @@ export class TodoFormComponent implements OnDestroy, OnInit {
 
   @Output() toDoChange = new EventEmitter<Partial<ToDo>>();
 
-  task: FormControl;
+  task!: FormControl;
 
   private unsubscribe = new Subject<void>();
 
