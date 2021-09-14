@@ -5,7 +5,7 @@ import 'jasmine-core/lib/jasmine-core/jasmine-html.js';
 import 'jasmine-core/lib/jasmine-core/boot.js';
 import './test.ts';
 import { AppModule } from './app/app.module';
-import { TestBed, async } from '@angular/core/testing';
+import { getTestBed, TestBed, async } from '@angular/core/testing';
 import {
   BrowserDynamicTestingModule,
   platformBrowserDynamicTesting
@@ -13,24 +13,23 @@ import {
 
 platformBrowserDynamicTesting()
   .bootstrapModule(AppModule)
-  .then(ref => {
-    // Ensure Angular destroys itself on hot reloads.
-    if (window['ngRef']) {
-      window['ngRef'].destroy();
-    }
-    window['ngRef'] = ref;
-
-    // Otherise, log the boot error
-  })
   .catch(err => console.error(err));
 
-(function bootstrap() {
+jasmine.getEnv().configure({ random: false });
+bootstrap();
+
+function bootstrap() {
   if (window.jasmineRef) {
     location.reload();
-
     return;
+  } else {
+    window.onload(new Event('anything'));
+    window.jasmineRef = jasmine.getEnv();
   }
 
-  window.onload(new Event('anything'));
-  window.jasmineRef = jasmine.getEnv();
-})();
+  // First, initialize the Angular testing environment.
+  getTestBed().initTestEnvironment(
+    BrowserDynamicTestingModule,
+    platformBrowserDynamicTesting()
+  );
+}
